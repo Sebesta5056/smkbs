@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMKBS OPR Generator</title>
+	<link rel="stylesheet" href="main.css">
+	
+</head>
+<body>
+
+<div class="website-header">
+    <img src="Sekolah_Menengah_Kebangsaan_Bukit_Sentosa.png" alt="Logo SMKBS">
+    <div class="header-text">
+        <h1>SMK BUKIT SENTOSA</h1>
+        <p>Sistem Penjanaan OPR/ Minit Curai/ PLC/ Mentor Mentee</p>
+    </div>
+</div>
+
+<div class="container">
+    
+    
+    <div class="input-form">
+		<label>Nama Program:</label>
+        <input id="program" placeholder="Nama Program" class="full-width">
+		
+	<div class="input-group">
+        <label>Bidang:</label>
+        <input id="bidang" placeholder="Bidang">
+    </div>
+	
+	<div class="input-group">
+        <label>Tempat:</label>
+        <input id="tempat" placeholder="Tempat">
+    </div>
+    
+    <div class="input-group">
+        <label>Tarikh Program:</label>
+        <input type="date" id="tarikh">
+    </div>
+    <div class="input-group">
+        <label>Masa Program:</label>
+        <input type="time" id="masa">
+    </div>
+	<div class="input-group">
+		<label>Bilangan Penyertaan:</label>
+		<input id="kehadiran" placeholder="Bilangan Penyertaan">
+	</div>
+	<div class="input-group">
+		<label>Jemputan:</label>
+		<input id="jemputan" placeholder="Jemputan">
+	</div>
+    
+    
+    <div class="full-width input-group">
+	    <label>Ringkasan Aktiviti:</label>
+	    <textarea id="ringkasan" placeholder="Masukkan ringkasan aktiviti di sini..."></textarea>
+	</div>
+	<div class="full-width input-group">
+		<label>Kekuatan:</label>
+	    <textarea id="kekuatan" placeholder="kekuatan dari program..."></textarea>
+	</div>
+	<div class="full-width input-group">
+		<label>Kekurangan:</label>	
+	    <textarea id="kekurangan" placeholder="Kekurangan yang dikenalpasti..."></textarea>
+	</div>
+	<div class="full-width input-group">
+		<label>Penambahbaikan:</label>
+	    <textarea id="penambahbaikan" placeholder="Masukkan cadangan penambahbaikan..."></textarea>
+	</div>
+
+		<div class="full-width" style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; background: #eee; padding: 10px; border-radius: 5px;">
+            <div><label>Disediakan Oleh:</label><input id="nama1" placeholder=""></div>
+            <div><label>Disemak Oleh:</label><input id="nama2" placeholder=""></div>
+            <div><label>Disahkan Oleh:</label><input id="nama3" placeholder=""></div>
+        </div>
+
+    <div class="full-width">
+        <label>Muat Naik Gambar (Max 4):</label>
+        <input type="file" id="gambar" multiple accept="image/*">
+    </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn-preview" onclick="generate()">1. Jana Laporan</button>
+        <button class="btn-download" onclick="downloadPDF()">2. Simpan ke PDF</button>
+		<button class="btn-drive" onclick="uploadToDrive()">3. Simpan Terus ke Drive</button>
+    </div>
+
+    <div id="output"></div>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

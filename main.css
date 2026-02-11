@@ -1,0 +1,407 @@
+<style>
+		html, body {
+		min-height: 100vh; /* Ensures the background covers the full screen height */
+		margin: 0;
+		padding: 0;
+	}
+
+	body {
+		font-family: Arial, sans-serif;
+		background-image: linear-gradient(rgba(240, 242, 245, 0.9), rgba(240, 242, 245, 0.9)), 
+						  url("hadapan_sekolah.jpg");
+		background-size: cover;
+		background-position: center center;
+		background-attachment: fixed;
+		background-repeat: no-repeat;
+		padding: 20px;
+	}
+    
+    .container { 
+        max-width: 950px; 
+ 
+		background-color: fff;
+        padding: 25px; 
+        margin: auto; 
+        border-radius: 15px; 
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* Softer shadow */
+    }
+
+    .input-form { 
+        display: grid; 
+        grid-template-columns: 1fr 1fr; 
+        gap: 12px; 
+        margin-bottom: 20px; 
+		font-weight: bold;
+		color:#2c3e50;
+    }
+	
+
+	.input-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+	}
+	
+	.input-group label {
+	    font-size: 11px;
+	    font-weight: bold;
+	    color: #2c3e50;
+	    margin-bottom: 2px;
+	    margin-left: 5px;
+	}
+	
+	/* Adjusting your grey signature box for mobile */
+	.sig-table { 
+        width: 100%; 
+        border-collapse: collapse; 
+        margin-top: 15px; 
+    }
+    
+    .sig-table td { 
+        border: 1px solid #000; 
+        width: 33.33%; 
+        padding: 10px; 
+        height: 100px; 
+        vertical-align: top; 
+    }
+
+	.signature-inputs {
+	    display: grid;
+	    grid-template-columns: 1fr 1fr 1fr;
+	    gap: 15px;
+	    background: rgba(238, 238, 238, 0.7); /* Slightly transparent grey */
+	    padding: 15px;
+	    border-radius: 8px;
+	    margin-top: 10px;
+	}
+	
+	.sig-input-group {
+	    display: flex;
+	    flex-direction: column;
+	}
+	
+	.sig-input-group label {
+	    font-size: 11px;
+	    font-weight: bold;
+	    color: #2c3e50;
+	    text-transform: uppercase;
+	}
+	
+	/* This creates the space for the actual signature/stamp */
+	.signature-space {
+	    height: 40px; /* Adjust this height for more or less space */
+	}
+	
+	.sig-input-group input {
+	    border: none;
+	    border-bottom: 1px solid #333; /* Makes it look like a signature line */
+	    background: transparent;
+	    border-radius: 0;
+	    padding: 5px 0;
+	    font-weight: bold;
+	    text-align: center;
+	}
+    
+    .full-width { grid-column: span 2; }
+
+    input, textarea { 
+        padding: 10px; 
+        border: 1px solid #ccc; 
+        border-radius: 5px; 
+        font-size: 14px; 
+        width: 100%; 
+        box-sizing: border-box; 
+        transition: border 0.3s;
+    }
+
+    input:focus, textarea:focus {
+        border-color: #3498db;
+        outline: none;
+    }
+    
+    .controls { 
+        text-align: center; 
+        margin-bottom: 30px; 
+    }
+    
+    button { 
+        padding: 12px 25px; 
+        font-weight: bold; 
+        cursor: pointer; 
+        border: none; 
+        border-radius: 5px; 
+        margin: 5px; 
+        transition: transform 0.2s, opacity 0.2s; /* Smooth reaction */
+    }
+
+    button:hover {
+        transform: translateY(-2px); /* Lifts up slightly when hovered */
+        opacity: 0.9;
+    }
+    
+    .btn-preview { background: #3498db; color: white; }
+    .btn-download { background: #27ae60; color: white; }
+    /* Reset Button Style */
+    .btn-reset { background: #e74c3c; color: white; }
+
+    /* PDF LAYOUT FIXES */
+    #output { margin: 0; padding: 0; }
+    
+    .report-content { 
+        border: none; 
+        padding: 10mm; 
+        background: white; 
+        width: 190mm; 
+        margin: 0 auto; 
+        box-sizing: border-box; 
+    }
+    
+    .header-table { 
+        width: 100%; 
+        border-bottom: 2px solid #000; 
+        margin-bottom: 10px; 
+        border-collapse: collapse; 
+    }
+    
+    .header-table td { 
+        border: none; 
+        padding: 5px; 
+        text-align: center; 
+        vertical-align: middle; 
+    }
+	
+	.header-table h3{
+		text-align: left;
+	}
+	
+	.header-table p{
+		text-align: left;
+	}
+    
+    .logo-img { height: 100px; width: auto; }
+
+    .data-table { width: 100%; border-collapse: collapse; }
+    
+    .data-table td { 
+        border: 1px solid #000; 
+        padding: 6px; 
+        font-size: 12px; 
+    }
+    
+    .label { 
+        width: 25%; 
+        font-weight: bold; 
+        background: #ececec; 
+    }
+
+    .section-title { 
+        font-weight: bold; 
+        border: 1px solid #000; 
+        padding: 5px; 
+        background: #ddd; 
+        text-align: left; 
+        font-size: 12px; 
+        border-top: none; 
+    }
+    
+    .images-grid { 
+        display: grid; 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 5px; 
+        border: 1px solid #000; 
+        border-top: none; 
+        padding: 8px; 
+        min-height: 150px; 
+        background: #fff;
+    }
+    
+    .images-grid img { 
+        width: 100%; 
+        height: 120px; 
+        object-fit: cover; 
+        border: 1px solid #000; 
+    }
+    
+    .text-box { 
+        border: 1px solid #000; 
+        min-height: 40px; 
+        padding: 8px; 
+        font-size: 12px; 
+        border-top: none; 
+        white-space: pre-wrap; 
+    }
+
+    .sig-table { 
+        width: 100%; 
+        border-collapse: collapse; 
+        margin-top: 15px; 
+    }
+    
+    .sig-table td { 
+        border: 1px solid #000; 
+        width: 33.33%; 
+        padding: 10px; 
+        height: 80px; 
+        vertical-align: top; 
+    }
+    
+    .sig-label { 
+        font-size: 9px; 
+        font-weight: bold; 
+    }
+	
+	.website-header {
+    background: transparent; /* No background color */
+    color: #2c3e50; /* Dark professional text color */
+    padding: 30px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 0px white; /* Subtle white glow to make text pop against background */
+	}
+
+	.website-header img {
+		height: 90px; /* Made the logo slightly larger since there's no box */
+		width: auto;
+		margin-right: 20px;
+		/* Optional: filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.2)); */
+	}
+
+	.header-text h1 {
+		margin: 0;
+		font-size: 28px;
+		font-weight: 800;
+		letter-spacing: 1px;
+		line-height: 1.1;
+	}
+
+	.header-text p {
+		margin: 0;
+		font-size: 15px;
+		font-weight: 600;
+		color: #34495e;
+	}
+
+	.input-group {
+	    display: flex;
+	    flex-direction: column;
+	    text-align: left;
+	    margin-bottom: 5px; /* Adds space between groups */
+	}
+	
+	.input-group label {
+	    font-size: 13px; /* Slightly larger for main sections */
+	    font-weight: bold;
+	    color: #2c3e50;
+	    margin-bottom: 5px;
+	    text-transform: uppercase; /* Makes it look like a section header */
+	    letter-spacing: 0.5px;
+	}
+	
+	textarea {
+	    min-height: 100px; /* Gives them a nice starting height */
+	    resize: vertical; /* Allows users to drag it larger if needed */
+	}
+
+	.btn-drive {
+	    background-color: #27ae60; /* Green for "Submit/Success" */
+	    color: white;
+	    border: none;
+	    padding: 12px 25px;
+	    border-radius: 8px;
+	    font-weight: bold;
+	    cursor: pointer;
+	    margin-top: 10px;
+	    transition: 0.3s;
+	    width: 100%; /* Full width on mobile */
+	}
+	
+	.btn-drive:hover {
+	    background-color: #219150;
+	    transform: translateY(-2px);
+	    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+	}
+
+		.btn-drive {
+	    background-color: #27ae60; /* Professional Green */
+	    color: white;
+	    border: none;
+	    padding: 12px 20px;
+	    border-radius: 8px;
+	    font-size: 16px;
+	    font-weight: bold;
+	    cursor: pointer;
+	    transition: 0.3s;
+	    width: 100%;
+	    margin-top: 10px;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    gap: 10px;
+	}
+
+.btn-drive:hover {
+    background-color: #219150;
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+}
+	
+	/* Mobile Styles */
+@media (max-width: 600px) {
+	.bg-wrapper { padding: 10px; }
+    .container {
+        padding: 15px;
+        margin: 5px;
+        width: 95%;
+    }
+
+	.input-group label {
+        font-size: 11px;
+    }
+    /* Change form to 1 column instead of 2 */
+    .input-form {
+        grid-template-columns: 1fr;
+    }
+
+
+	.signature-inputs {
+        grid-template-columns: 1fr;/* Stack names on top of each other on mobile */
+    }
+    .signature-space {
+        height: 30px; /* Slightly smaller gap on mobile to save screen space */
+    }
+    
+    .input-form {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .full-width {
+        grid-column: span 1 !important;
+    }
+
+    /* Adjust button sizes for thumbs */
+    button {
+        width: 100%;
+        margin: 5px 0;
+    }
+	
+	.website-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    .website-header img {
+        margin-right: 0;
+        margin-bottom: 10px;
+        height: 70px;
+    }
+    .header-text h1 {
+        font-size: 20px;
+    }
+	.controls {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+</style>
