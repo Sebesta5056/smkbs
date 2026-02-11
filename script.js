@@ -31,8 +31,8 @@ function generate() {
 		<div class="section-title">KEKUATAN:</div>
         <div class="text-box">${document.getElementById('kekuatan').value || ' '}</div>
 		
-		<div class="section-title">KEKURANGAN:</div>
-        <div class="text-box">${document.getElementById('kekurangan').value || ' '}</div>
+		<div class="section-title">KELEMAHAN:</div>
+        <div class="text-box">${document.getElementById('kelemahan').value || ' '}</div>
 
         <div class="section-title">PENAMBAHBAIKAN:</div>
         <div class="text-box">${document.getElementById('penambahbaikan').value || ' '}</div>
@@ -78,82 +78,36 @@ function generate() {
 
 function downloadPDF() {
     const element = document.getElementById('report-to-print');
-    if (!element) return alert("Sila Jana Laporan dahulu!");
+    if (!element) return alert("Sila Jana Laporan dahulu!"); 
+	
+	const programName = document.getElementById('program').value || "Laporan_OPR";
 
     // FORCE BROWSER TO TOP TO PREVENT TILT
     window.scrollTo(0, 0);
 
     const opt = {
         margin: [10, 5, 10, 5],
-        filename: 'Laporan_OPR_SMKBS.pdf',
+        
+		filename: programName + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
             scale: 2, 
             useCORS: true, 
             // PREVENTS TILT AND SHIFT
             scrollX: 0, 
-            scrollY: 0,
+            scrollY: 0.5,
             x: 0,
             y: 0,
             windowWidth: element.clientWidth
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
+		
 
     html2pdf().set(opt).from(element).save();
 }
 
-async function uploadToDrive() {
-    const element = document.getElementById('report-to-print');
-    if (!element) return alert("Sila Jana Laporan dahulu!");
-    
-    const programName = document.getElementById('program').value || "Laporan_OPR";
-    const btn = document.querySelector('.btn-drive');
-    
-    btn.innerText = "Sedang Menghantar...";
-    btn.disabled = true;
 
-    const opt = {
-        margin: [10, 5, 10, 5],
-        filename: programName + '.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    try {
-        const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
-        
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onloadend = async function() {
-            const base64data = reader.result.split(',')[1];
-            const scriptUrl = "https://script.google.com/macros/s/AKfycbyMS4eQhrWJxh36BDHVCIiKTTsBLJjrOkKZUirV4ik-cMX8-jJyYcqM9KA5Kt2hfHEncw/exec"; 
-            
-            // Sending as text/plain is a trick to bypass CORS preflight
-            await fetch(scriptUrl, {
-                method: 'POST',
-                mode: 'no-cors', 
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify({
-                    base64: base64data,
-                    fileName: programName + ".pdf"
-                })
-            });
-
-            // Since mode is 'no-cors', we don't try to read 'response.json()'
-            // We just inform the user the request was sent.
-            alert("Proses menghantar selesai. Sila semak folder Google Drive anda sebentar lagi.");
-            btn.innerText = "3. Selesai Dihantar";
-            btn.disabled = false;
-        };
-    } catch (error) {
-        console.error(error);
-        alert("Gagal menjana PDF atau menghantar.");
-        btn.innerText = "3. Simpan Terus ke Drive";
-        btn.disabled = false;
-    }
-}
 
 async function uploadToDrive() {
     const element = document.getElementById('report-to-print');
