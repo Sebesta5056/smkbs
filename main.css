@@ -273,7 +273,7 @@
 	}
 
 	.website-header img {
-		height: 90px; /* Made the logo slightly larger since there's no box */
+		height: 70px; /* Made the logo slightly larger since there's no box */
 		width: auto;
 		margin-right: 20px;
 		/* Optional: filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.2)); */
