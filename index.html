@@ -25,9 +25,19 @@
         <input id="program" placeholder="Nama Program" class="full-width">
 		
 	<div class="input-group">
-        <label>Bidang:</label>
-        <input id="bidang" placeholder="Bidang">
-    </div>
+		<label>Bidang:</label>
+		<select id="bidang">
+			<option value="">-- Sila Pilih Bidang --</option>
+			<option value="Bahasa">Bahasa</option>
+			<option value="Sains & Matematik">Sains & Matematik</option>
+			<option value="Sains Kemasyarakatan">Sains Kemasyarakatan</option>
+			<option value="Teknik & Vokasional">Teknik & Vokasional</option>
+			<option value="Hal Ehwal Murid (HEM)">Hal Ehwal Murid (HEM)</option>
+			<option value="Kokurikulum">Kokurikulum</option>
+			<option value="Pentadbiran">Pentadbiran</option>
+			<option value="PPKI">PPKI</option>
+		</select>
+	</div>
 	
 	<div class="input-group">
         <label>Tempat:</label>
@@ -38,10 +48,14 @@
         <label>Tarikh Program:</label>
         <input type="date" id="tarikh">
     </div>
-    <div class="input-group">
-        <label>Masa Program:</label>
-        <input type="time" id="masa">
-    </div>
+	<div class="input-group">
+		<label>Masa Program:</label>
+		<div class="time-range">
+			<input type="time" id="masa_mula">
+			<span>hingga</span>
+			<input type="time" id="masa_tamat">
+		</div>
+	</div>
 	<div class="input-group">
 		<label>Bilangan Penyertaan:</label>
 		<input id="kehadiran" placeholder="Bilangan Penyertaan">
@@ -54,7 +68,7 @@
     
     <div class="full-width input-group">
 	    <label>Ringkasan Aktiviti:</label>
-	    <textarea id="ringkasan" placeholder="Masukkan ringkasan aktiviti di sini..."></textarea>
+	    <textarea maxlength ="120" id="ringkasan" placeholder="Masukkan ringkasan aktiviti di sini..."></textarea>
 	</div>
 	<div class="full-width input-group">
 		<label>Kekuatan:</label>
@@ -83,7 +97,7 @@
 
     <div class="controls">
         <button class="btn-preview" onclick="generate()">1. Jana Laporan</button>
-        <button class="btn-download" onclick="downloadPDF()">2. Simpan ke PDF</button>
+        <button class="btn-download" onclick="printReport()">2. Cetak / Simpan PDF</button>
 		<button class="btn-drive" onclick="uploadToDrive()">3. Simpan Terus ke Drive</button>
     </div>
 

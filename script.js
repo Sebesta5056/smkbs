@@ -1,5 +1,16 @@
 function generate() {
     const output = document.getElementById("output");
+	
+	const masaMula = document.getElementById('masa_mula').value;
+    const masaTamat = document.getElementById('masa_tamat').value;
+    const masaDisplay = (masaMula && masaTamat) ? `${masaMula} - ${masaTamat}` : (masaMula || masaTamat || '-');
+	
+	const bidang = document.getElementById('bidang').value;
+    
+    if (bidang === "") {
+        alert("Sila pilih Bidang terlebih dahulu!");
+        return; // This stops the report from being generated
+    }
     
     const content = `
     <div class="report-content" id="report-to-print">
@@ -16,7 +27,7 @@ function generate() {
         <table class="data-table">
             <tr><td class="label">NAMA PROGRAM</td><td>${document.getElementById('program').value.toUpperCase() || '-'}</td></tr>
             <tr><td class="label">BIDANG</td><td>${document.getElementById('bidang').value.toUpperCase() || '-'}</td></tr>
-            <tr><td class="label">TARIKH / MASA</td><td>${document.getElementById('tarikh').value} / ${document.getElementById('masa').value}</td></tr>
+            <tr><td class="label">TARIKH / MASA</td><td>${document.getElementById('tarikh').value} / ${masaDisplay}</td></tr>
             <tr><td class="label">TEMPAT</td><td>${document.getElementById('tempat').value.toUpperCase() || '-'}</td></tr>
             <tr><td class="label">KEHADIRAN</td><td>${document.getElementById('kehadiran').value.toUpperCase() || '-'}</td></tr>
             <tr><td class="label">JEMPUTAN</td><td>${document.getElementById('jemputan').value.toUpperCase() || '-'}</td></tr>
@@ -76,35 +87,19 @@ function generate() {
     }
 }
 
-function downloadPDF() {
-    const element = document.getElementById('report-to-print');
-    if (!element) return alert("Sila Jana Laporan dahulu!"); 
-	
-	const programName = document.getElementById('program').value || "Laporan_OPR";
+function printReport() {
+    const report = document.getElementById("report-to-print");
+    
+    if (!report) {
+        alert("Sila klik 'Jana Laporan' terlebih dahulu!");
+        return;
+    }
 
-    // FORCE BROWSER TO TOP TO PREVENT TILT
+    // Scroll to top so the print view starts correctly
     window.scrollTo(0, 0);
 
-    const opt = {
-        margin: [10, 5, 10, 5],
-        
-		filename: programName + '.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            // PREVENTS TILT AND SHIFT
-            scrollX: 0, 
-            scrollY: 0.5,
-            x: 0,
-            y: 0,
-            windowWidth: element.clientWidth
-        },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-		
-
-    html2pdf().set(opt).from(element).save();
+    // Trigger the browser print dialog
+    window.print();
 }
 
 
@@ -162,3 +157,5 @@ async function uploadToDrive() {
         btn.disabled = false;
     }
 }
+
+
