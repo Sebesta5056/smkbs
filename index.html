@@ -28,14 +28,14 @@
 		<label>Bidang:</label>
 		<select id="bidang">
 			<option value="">-- Sila Pilih Bidang --</option>
-			<option value="Bahasa">Bahasa</option>
-			<option value="Sains & Matematik">Sains & Matematik</option>
-			<option value="Sains Kemasyarakatan">Sains Kemasyarakatan</option>
-			<option value="Teknik & Vokasional">Teknik & Vokasional</option>
-			<option value="Hal Ehwal Murid (HEM)">Hal Ehwal Murid (HEM)</option>
-			<option value="Kokurikulum">Kokurikulum</option>
-			<option value="Pentadbiran">Pentadbiran</option>
-			<option value="PPKI">PPKI</option>
+			<option value="Unit kurikulum">Bahasa</option>
+			<option value="Unit hem">Sains & Matematik</option>
+			<option value="Unit kokurikukum">Sains Kemasyarakatan</option>
+			<option value="Bidang bahasa">Teknik & Vokasional</option>
+			<option value="Bidang sains dan matematik">Hal Ehwal Murid (HEM)</option>
+			<option value="Bidang sains sosial">Kokurikulum</option>
+			<option value="Bidang teknik dan vokasiona">Pentadbiran</option>
+			<option value="Pengurusan dan pentadbiran">PPKI</option>
 		</select>
 	</div>
 	
@@ -104,7 +104,10 @@
     <div id="output"></div>
 </div>
 
-
+<div id="loading-overlay" style="display: none;">
+		<div class="loader"></div>
+		<p>Sedang memuat naik ke Google Drive... Sila tunggu.</p>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 

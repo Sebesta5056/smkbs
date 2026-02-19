@@ -11,6 +11,20 @@ function generate() {
         alert("Sila pilih Bidang terlebih dahulu!");
         return; // This stops the report from being generated
     }
+	
+	const gambarInput = document.getElementById('gambar');
+    let imagesHtml = '';
+
+    // PERATURAN BARU: Hanya jana bahagian imej jika ada fail dipilih
+    if (gambarInput.files && gambarInput.files.length > 0) {
+        imagesHtml = `
+            <div class="images-grid">
+                ${Array.from(gambarInput.files).map(file => 
+                    `<img src="${URL.createObjectURL(file)}" alt="Gambar Program">`
+                ).join('')}
+            </div>
+        `;
+    }
     
     const content = `
     <div class="report-content" id="report-to-print">
@@ -37,16 +51,16 @@ function generate() {
         <div class="images-grid" id="imageContainer"></div>
 
         <div class="section-title">RINGKASAN AKTIVITI:</div>
-        <div class="text-box">${document.getElementById('ringkasan').value || ' '}</div>
+        <div class="text-box">${document.getElementById('ringkasan').value.toUpperCase() || ' '}</div>
 		
 		<div class="section-title">KEKUATAN:</div>
-        <div class="text-box">${document.getElementById('kekuatan').value || ' '}</div>
+        <div class="text-box">${document.getElementById('kekuatan').value.toUpperCase() || ' '}</div>
 		
 		<div class="section-title">KELEMAHAN:</div>
-        <div class="text-box">${document.getElementById('kelemahan').value || ' '}</div>
+        <div class="text-box">${document.getElementById('kelemahan').value.toUpperCase() || ' '}</div>
 
         <div class="section-title">PENAMBAHBAIKAN:</div>
-        <div class="text-box">${document.getElementById('penambahbaikan').value || ' '}</div>
+        <div class="text-box">${document.getElementById('penambahbaikan').value.toUpperCase() || ' '}</div>
 
 		<table class="sig-table">
 		    <tr>
@@ -105,40 +119,77 @@ function printReport() {
 
 
 async function uploadToDrive() {
+    // 1. Jana laporan dalam HTML supaya ada kandungan untuk ditangkap
+    generate(); 
+
+    // Ambil elemen spesifik yang mengandungi kandungan laporan
     const element = document.getElementById('report-to-print');
-    if (!element) return alert("Sila Jana Laporan dahulu!");
-    
     const programName = document.getElementById('program').value || "Laporan_OPR";
-    const btn = document.querySelector('.btn-drive');
+
+    if (!element) {
+        alert("Sila isi maklumat dan tekan 'Jana Laporan' terlebih dahulu.");
+        return;
+    }
+	
+	// --- BAHAGIAN PENTING: TUNGGU IMEJ LOAD ---
+    const images = element.getElementsByTagName('img');
+    const imagePromises = [];
+
+    for (let img of images) {
+        if (img.src && !img.complete) {
+            imagePromises.push(new Promise((resolve, reject) => {
+                img.onload = resolve;
+                img.onerror = resolve; // Teruskan juga jika satu imej rosak
+            }));
+        }
+    }
     
-    btn.innerText = "Sedang Menghantar...";
-    btn.disabled = true;
+    // Tunggu sehingga semua imej selesai loading
+    await Promise.all(imagePromises);
+    // Beri sedikit masa tambahan (0.5 saat) untuk rendering browser
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Paparkan mesej loading (optional)
+    console.log("Sedang menyediakan PDF...");
 
     const opt = {
-        margin: [10, 5, 10, 5],
-        filename: programName + '.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+		margin: 0,
+		filename: programName + '.pdf',
+		image: { type: 'jpeg', quality: 0.98 },
+		html2canvas: { 
+			scale: 2, 
+			useCORS: true, 
+			logging: false,
+			scrollX: 0,
+			scrollY: 0,
+			windowWidth: document.documentElement.offsetWidth, // Guna lebar skrin sebenar
+		},
+		jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+	};
+	
+	const loadingOverlay = document.getElementById('loading-overlay');
+	
+	// 1. Tunjukkan loading screen
+    loadingOverlay.style.display = 'flex';
 
     try {
-        // 1. Generate the PDF blob
-        const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
+        // 2. Tukar HTML kepada Blob PDF secara asynchronous
+        const worker = html2pdf().set(opt).from(element);
+        const blob = await worker.outputPdf('blob');
         
-        // 2. Convert to Base64
+        // 3. Tukar Blob kepada Base64 untuk dihantar ke Apps Script
         const reader = new FileReader();
         reader.readAsDataURL(blob);
         reader.onloadend = async function() {
             const base64data = reader.result.split(',')[1];
             
-            // 3. Your NEW Deployment URL
-            const scriptUrl = "https://script.google.com/macros/s/AKfycbwDCV_Ozyp7bPD3K4C86JEuzWUMsg3M3oxYsNdcBH-rYuQIRVRcjFa8BVYGNYJ0K9gV4w/exec"; 
+            // URL Web App yang anda dapat dari Google Apps Script
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbw2ZRh6qOE4ydow-9TGCxW02WTSt6fyrnKWi4W9ahdI_fdjdsGNIpP0zBEzwtSQtK0L/exec"; 
             
-            // 4. Send to Google
-            await fetch(scriptUrl, {
+            // 4. Hantar ke Google Drive
+            const response = await fetch(scriptUrl, {
                 method: 'POST',
-                mode: 'no-cors', 
+                mode: 'no-cors', // Penting untuk mengelakkan ralat CORS
                 headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify({
                     base64: base64data,
@@ -146,15 +197,18 @@ async function uploadToDrive() {
                 })
             });
 
-            alert("Tahniah! Laporan PDF anda telah selamat dihantar ke Google Drive.");
-            btn.innerText = "3. Berjaya Dihantar";
-            btn.disabled = false;
+            alert("Fail telah berjaya dihantar ke Google Drive!");
         };
-    } catch (error) {
-        console.error(error);
-        alert("Gagal menghantar: " + error);
-        btn.innerText = "3. Simpan Terus ke Drive";
-        btn.disabled = false;
+    } 
+	catch (error) 
+	{
+        console.error("Ralat:", error);
+        alert("Gagal memuat naik ke fail. Pastikan internet stabil.");
+    }
+	finally 
+	{
+        // 5. Sembunyikan loading screen tidak kira berjaya atau gagal
+        loadingOverlay.style.display = 'none';
     }
 }
 
