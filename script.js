@@ -1,27 +1,39 @@
 function generate() {
     const output = document.getElementById("output");
-	
-	const masaMula = document.getElementById('masa_mula').value;
+    
+    const masaMula = document.getElementById('masa_mula').value;
     const masaTamat = document.getElementById('masa_tamat').value;
     const masaDisplay = (masaMula && masaTamat) ? `${masaMula} - ${masaTamat}` : (masaMula || masaTamat || '-');
-	
-	const bidang = document.getElementById('bidang').value;
+    
+    const bidang = document.getElementById('bidang').value;
     
     if (bidang === "") {
         alert("Sila pilih Bidang terlebih dahulu!");
-        return; // This stops the report from being generated
+        return; 
     }
+    
+    // Ambil kandungan dari Quill Editor
+    const ringkasanContent = quill.root.innerHTML;
+    const gambarInput = document.getElementById('gambar');
 	
-	const gambarInput = document.getElementById('gambar');
-    let imagesHtml = '';
+    
+    // DEFINISI PENTING: Semak jika tiada gambar
+    const isNoImage = (!gambarInput.files || gambarInput.files.length === 0);
+    
+    let imagesSectionHtml = '';
 
-    // PERATURAN BARU: Hanya jana bahagian imej jika ada fail dipilih
-    if (gambarInput.files && gambarInput.files.length > 0) {
-        imagesHtml = `
-            <div class="images-grid">
-                ${Array.from(gambarInput.files).map(file => 
-                    `<img src="${URL.createObjectURL(file)}" alt="Gambar Program">`
-                ).join('')}
+    // LOGIK: Jana bahagian imej
+    if (!isNoImage) {
+        imagesSectionHtml = `
+            <div class="section-title">LAPORAN BERGAMBAR</div>
+            <div class="images-grid" id="imageContainer" style="min-height: 200px; border: 1px solid #ccc; padding: 3px; margin-bottom: 5px;">
+                </div>
+        `;
+    } else {
+        imagesSectionHtml = `
+            <div class="section-title">LAPORAN BERGAMBAR</div>
+            <div id="imageContainer" style="min-height: 20px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; color: #999; margin-bottom: 10px; font-size: 12px;">
+                Tiada gambar disediakan
             </div>
         `;
     }
@@ -35,7 +47,7 @@ function generate() {
                     <h3 style="margin:0; font-size:17px;">SEKOLAH MENENGAH KEBANGSAAN BUKIT SENTOSA</h3>
                     <p style="margin:5px 0; font-size:12px;"><b>BANDAR BARU BUKIT SENTOSA, 48300 RAWANG, SELANGOR</b></p>
                 </td>
-                </tr>
+            </tr>
         </table>
 
         <table class="data-table">
@@ -47,53 +59,58 @@ function generate() {
             <tr><td class="label">JEMPUTAN</td><td>${document.getElementById('jemputan').value.toUpperCase() || '-'}</td></tr>
         </table>
 
-        <div class="section-title">LAPORAN BERGAMBAR</div>
-        <div class="images-grid" id="imageContainer"></div>
-
         <div class="section-title">RINGKASAN AKTIVITI:</div>
-        <div class="text-box">${document.getElementById('ringkasan').value.toUpperCase() || ' '}</div>
-		
-		<div class="section-title">KEKUATAN:</div>
+        <div class="text-box" style="min-height: ${isNoImage ? '300px' : '40px'}; text-indent: 0;">
+            ${ringkasanContent}
+        </div>
+        
+        <div class="section-title">KEKUATAN:</div>
         <div class="text-box">${document.getElementById('kekuatan').value.toUpperCase() || ' '}</div>
-		
-		<div class="section-title">KELEMAHAN:</div>
+        
+        <div class="section-title">KELEMAHAN:</div>
         <div class="text-box">${document.getElementById('kelemahan').value.toUpperCase() || ' '}</div>
 
         <div class="section-title">PENAMBAHBAIKAN:</div>
         <div class="text-box">${document.getElementById('penambahbaikan').value.toUpperCase() || ' '}</div>
+        
+        ${imagesSectionHtml}
 
-		<table class="sig-table">
-		    <tr>
-		        <td>
-		            <div class="sig-label">DISEDIAKAN OLEH:</div>
-		            <div style="height: 50px;"></div> <div style="border-top: 1px solid black; width: 80%; margin: 0 auto;"></div>
-		            <div style="font-size: 11px; text-align: center; font-weight: bold; margin-top: 5px;">${document.getElementById('nama1').value.toUpperCase()}</div>
-		        </td>
-		        <td>
-		            <div class="sig-label">DISEMAK OLEH:</div>
-		            <div style="height: 50px;"></div> <div style="border-top: 1px solid black; width: 80%; margin: 0 auto;"></div>
-		            <div style="font-size: 11px; text-align: center; font-weight: bold; margin-top: 5px;">${document.getElementById('nama2').value.toUpperCase()}</div>
-		        </td>
-		        <td>
-		            <div class="sig-label">DISAHKAN OLEH:</div>
-		            <div style="height: 50px;"></div> <div style="border-top: 1px solid black; width: 80%; margin: 0 auto;"></div>
-		            <div style="font-size: 11px; text-align: center; font-weight: bold; margin-top: 5px;">${document.getElementById('nama3').value.toUpperCase()}</div>
-		        </td>
-		    </tr>
-		</table>
+        <table class="sig-table">
+            <tr>
+                <td>
+                    <div class="sig-label">DISEDIAKAN OLEH:</div>
+                    <div style="height: 50px;"></div> <div style="border-top: 1px solid black; width: 80%; margin: 0 auto;"></div>
+                    <div style="font-size: 11px; text-align: center; font-weight: bold; margin-top: 5px;">${document.getElementById('nama1').value.toUpperCase()}</div>
+                </td>
+                <td>
+                    <div class="sig-label">DISEMAK OLEH:</div>
+                    <div style="height: 50px;"></div> <div style="border-top: 1px solid black; width: 80%; margin: 0 auto;"></div>
+                    <div style="font-size: 11px; text-align: center; font-weight: bold; margin-top: 5px;">${document.getElementById('nama2').value.toUpperCase()}</div>
+                </td>
+                <td>
+                    <div class="sig-label">DISAHKAN OLEH:</div>
+                    <div style="height: 50px;"></div> <div style="border-top: 1px solid black; width: 80%; margin: 0 auto;"></div>
+                    <div style="font-size: 11px; text-align: center; font-weight: bold; margin-top: 5px;">${document.getElementById('nama3').value.toUpperCase()}</div>
+                </td>
+            </tr>
+        </table>
     </div>`;
 
     output.innerHTML = content;
 
-    // Process Images
-    const files = document.getElementById('gambar').files;
+    // Proses gambar jika ada
+    const files = gambarInput.files;
     const imgBox = document.getElementById('imageContainer');
-    if (files.length > 0) {
-        Array.from(files).slice(0, 6).forEach(file => {
+    
+    if (files.length > 0 && imgBox) {
+        imgBox.innerHTML = ''; // Kosongkan placeholder
+        Array.from(files).slice(0, 4).forEach(file => {
             const reader = new FileReader();
             reader.onload = (e) => {
                 const img = document.createElement("img");
                 img.src = e.target.result;
+                img.style.width = "100%";
+                img.style.borderRadius = "5px";
                 imgBox.appendChild(img);
             };
             reader.readAsDataURL(file);

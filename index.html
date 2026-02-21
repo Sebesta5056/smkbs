@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SMKBS OPR Generator</title>
 	<link rel="stylesheet" href="main.css">
+	<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 	
 </head>
 <body>
@@ -28,14 +29,14 @@
 		<label>Bidang:</label>
 		<select id="bidang">
 			<option value="">-- Sila Pilih Bidang --</option>
-			<option value="Unit kurikulum">Bahasa</option>
-			<option value="Unit hem">Sains & Matematik</option>
-			<option value="Unit kokurikukum">Sains Kemasyarakatan</option>
-			<option value="Bidang bahasa">Teknik & Vokasional</option>
-			<option value="Bidang sains dan matematik">Hal Ehwal Murid (HEM)</option>
-			<option value="Bidang sains sosial">Kokurikulum</option>
-			<option value="Bidang teknik dan vokasiona">Pentadbiran</option>
-			<option value="Pengurusan dan pentadbiran">PPKI</option>
+			<option value="Unit Kurikulum">Unit Kurikulum</option>
+			<option value="Unit HEM">Unit HEM</option>
+			<option value="Unit Kokurikulum">Unit Kokurikulum</option>
+			<option value="Bidang Bahasa">Bidang Bahasa</option>
+			<option value="Bidang Sains & Matematik">Bidang Sains & Matematik</option>
+			<option value="Bidang Sains Sosial">Bidang Sains Sosial</option>
+			<option value="Bidang Teknik & Vokasional">Bidang Teknik & Vokasional</option>
+			<option value="Pengurusan & Pentadbiran">Pengurusan & Pentadbiran</option>
 		</select>
 	</div>
 	
@@ -67,12 +68,12 @@
     
     
     <div class="full-width input-group">
-	    <label>Ringkasan Aktiviti:</label>
-	    <textarea maxlength ="120" id="ringkasan" placeholder="Masukkan ringkasan aktiviti di sini..."></textarea>
+		<label>Ringkasan Aktiviti:</label>
+		<div id="editor-ringkasan" style="background: white; min-height:;"></div>
 	</div>
 	<div class="full-width input-group">
 		<label>Kekuatan:</label>
-	    <textarea id="kekuatan" placeholder="kekuatan dari program..."></textarea>
+	    <textarea maxlength ="200" id="kekuatan" placeholder="kekuatan dari program..."></textarea>
 	</div>
 	<div class="full-width input-group">
 		<label>Kelemahan:</label>	
@@ -97,8 +98,8 @@
 
     <div class="controls">
         <button class="btn-preview" onclick="generate()">1. Jana Laporan</button>
-        <button class="btn-download" onclick="printReport()">2. Cetak / Simpan PDF</button>
-		<button class="btn-drive" onclick="uploadToDrive()">3. Simpan Terus ke Drive</button>
+        <button class="btn-download" onclick="printReport()">2. Simpan PDF</button>
+		<button class="btn-drive" onclick="uploadToDrive()">3. Muat Naik ke Google Drive</button>
     </div>
 
     <div id="output"></div>
@@ -112,6 +113,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script src="script.js"></script>
+	
+	<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+	<script>
+		// Inisialisasi Quill Editor
+		var quill = new Quill('#editor-ringkasan', {
+			theme: 'snow',
+			modules: {
+				toolbar: [
+					['bold', 'italic', 'underline'], // Format asas
+					[{ 'list': 'ordered'}, { 'list': 'bullet' }], // Senarai
+					['clean'] // Butang buang format
+				]
+			}
+		});
+	</script>
 </body>
 </html>
 
