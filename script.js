@@ -1,6 +1,23 @@
 function generate() {
     const output = document.getElementById("output");
     
+    // --- MULA: FUNGSI FORMAT TARIKH ---
+    const tarikhInput = document.getElementById('tarikh').value;
+    let tarikhDisplay = '-';
+
+    if (tarikhInput) {
+        const bulanNama = [
+            "JANUARI", "FEBUARI", "MAC", "APRIL", "MEI", "JUN",
+            "JULAI", "OGOS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DISEMBER"
+        ];
+        const d = new Date(tarikhInput);
+        const hari = d.getDate();
+        const bulan = bulanNama[d.getMonth()];
+        const tahun = d.getFullYear();
+        tarikhDisplay = `${hari} ${bulan} ${tahun}`;
+    }
+    // --- TAMAT: FUNGSI FORMAT TARIKH ---
+
     const masaMula = document.getElementById('masa_mula').value;
     const masaTamat = document.getElementById('masa_tamat').value;
     const masaDisplay = (masaMula && masaTamat) ? `${masaMula} - ${masaTamat}` : (masaMula || masaTamat || '-');
@@ -12,17 +29,12 @@ function generate() {
         return; 
     }
     
-    // Ambil kandungan dari Quill Editor
     const ringkasanContent = quill.root.innerHTML;
     const gambarInput = document.getElementById('gambar');
-	
-    
-    // DEFINISI PENTING: Semak jika tiada gambar
     const isNoImage = (!gambarInput.files || gambarInput.files.length === 0);
     
     let imagesSectionHtml = '';
 
-    // LOGIK: Jana bahagian imej
     if (!isNoImage) {
         imagesSectionHtml = `
             <div class="section-title">LAPORAN BERGAMBAR</div>
@@ -53,7 +65,7 @@ function generate() {
         <table class="data-table">
             <tr><td class="label">NAMA PROGRAM</td><td>${document.getElementById('program').value.toUpperCase() || '-'}</td></tr>
             <tr><td class="label">BIDANG</td><td>${document.getElementById('bidang').value.toUpperCase() || '-'}</td></tr>
-            <tr><td class="label">TARIKH / MASA</td><td>${document.getElementById('tarikh').value} / ${masaDisplay}</td></tr>
+            <tr><td class="label">TARIKH / MASA</td><td>${tarikhDisplay} / ${masaDisplay}</td></tr>
             <tr><td class="label">TEMPAT</td><td>${document.getElementById('tempat').value.toUpperCase() || '-'}</td></tr>
             <tr><td class="label">KEHADIRAN</td><td>${document.getElementById('kehadiran').value.toUpperCase() || '-'}</td></tr>
             <tr><td class="label">JEMPUTAN</td><td>${document.getElementById('jemputan').value.toUpperCase() || '-'}</td></tr>
@@ -98,12 +110,11 @@ function generate() {
 
     output.innerHTML = content;
 
-    // Proses gambar jika ada
     const files = gambarInput.files;
     const imgBox = document.getElementById('imageContainer');
     
     if (files.length > 0 && imgBox) {
-        imgBox.innerHTML = ''; // Kosongkan placeholder
+        imgBox.innerHTML = '';
         Array.from(files).slice(0, 4).forEach(file => {
             const reader = new FileReader();
             reader.onload = (e) => {
